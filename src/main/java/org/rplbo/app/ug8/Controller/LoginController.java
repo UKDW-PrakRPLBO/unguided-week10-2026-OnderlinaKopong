@@ -1,10 +1,14 @@
 package org.rplbo.app.ug8.Controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.event.ActionEvent;
 import org.rplbo.app.ug8.UmbrellaApp;
 import org.rplbo.app.ug8.UmbrellaDBManager;
+import javafx.scene.control.Label;
+
+import java.io.IOException;
+
 
 public class LoginController {
     @FXML private TextField txtUsername;
@@ -12,7 +16,7 @@ public class LoginController {
     @FXML private Label lblStatus;
 
     @FXML
-    private void handleLogin(ActionEvent event) {
+    private void handleLogin(ActionEvent event) throws IOException {
         // ==============================================================================
         // TODO 1: PROSES AUTENTIKASI (LOGIN)
         // ==============================================================================
@@ -26,7 +30,32 @@ public class LoginController {
         // ==============================================================================
 
         // --- TULIS KODE ANDA DI BAWAH INI ---
+        // 1. Ambil input username dan password
+        String username = txtUsername.getText();
+        String password = txtPassword.getText();
 
+        // 2. Instansiasi DB Manager
+        UmbrellaDBManager dbManager = new UmbrellaDBManager();
 
+        // 3. Validasi user
+        String user = dbManager.validateUser(username, password);
+
+        // 4. Jika login berhasil
+        if (user != null) {
+
+            // Simpan user login
+            UmbrellaApp.loggedInUser = user;
+
+            // Pindah ke halaman utama
+            UmbrellaApp.switchScene("umbrella-view.fxml");
+
+        } else {
+
+            // 5. Jika gagal
+            lblStatus.setText("AUTHENTICATION FAILED");
+        }
     }
 }
+
+
+

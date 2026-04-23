@@ -1,15 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <!--Buatlah Semirip mungkin, bebas asalkan jalan-->
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.rplbo.app.ug8.Controller.LoginController"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="292.0" prefWidth="475.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.rplbo.app.ug8.Controller.LoginController">
+   <children>
+
+      <!-- Container Tengah -->
+      <VBox alignment="CENTER"
+            spacing="12.0"
+            AnchorPane.topAnchor="40.0"
+            AnchorPane.leftAnchor="110.0"
+            AnchorPane.rightAnchor="110.0"
+            AnchorPane.bottomAnchor="40.0">
+
+         <children>
+
+            <!-- Judul -->
+            <Label text="UMBRELLA LOGIN">
+               <font>
+                  <Font size="20.0"/>
+               </font>
+            </Label>
+
+            <!-- Username -->
+            <TextField fx:id="txtUsername"
+                       promptText="Username"
+                       prefWidth="220.0"/>
+
+            <!-- Password -->
+            <PasswordField fx:id="txtPassword"
+                           promptText="Password"
+                           prefWidth="220.0"/>
+
+            <!-- Tombol Login -->
+            <Button text="LOGIN"
+                    prefWidth="220.0"
+                    onAction="#handleLogin"/>
+
+            <!-- Status Login -->
+            <Label fx:id="lblStatus"
+                   text=""/>
+
+         </children>
+
+         <padding>
+            <Insets top="15" right="15" bottom="15" left="15"/>
+         </padding>
+
+      </VBox>
+
+   </children>
+
 </AnchorPane>

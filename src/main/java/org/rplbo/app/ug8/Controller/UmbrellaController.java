@@ -38,6 +38,10 @@ public class UmbrellaController implements Initializable {
         // ==============================================================================
 
         // --- TULIS KODE ANDA DI BAWAH INI ---
+        colName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        colInitial.setCellValueFactory(new PropertyValueFactory<>("initialStock"));
+        colSupply.setCellValueFactory(new PropertyValueFactory<>("newSupply"));
+        colFinal.setCellValueFactory(new PropertyValueFactory<>("finalStock"));
 
 
 
@@ -58,6 +62,16 @@ public class UmbrellaController implements Initializable {
         tableInventory.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 // --- TULIS KODE ANDA DI BAWAH INI ---
+                if (newVal != null) {
+
+                    selectedItem = newVal;
+
+                    txtItem.setText(newVal.getItemName());
+                    txtInitial.setText(String.valueOf(newVal.getInitialStock()));
+                    txtSupply.setText(String.valueOf(newVal.getNewSupply()));
+
+                    txtItem.setDisable(true);
+                }
 
 
 
@@ -84,6 +98,32 @@ public class UmbrellaController implements Initializable {
         // ==============================================================================
 
         // --- TULIS KODE ANDA DI BAWAH INI ---
+        if (selectedItem != null) {
+
+            try {
+                int initial = Integer.parseInt(txtInitial.getText());
+                int supply = Integer.parseInt(txtSupply.getText());
+
+                int finalStock = initial + supply;
+
+                InventoryItem updatedItem = new InventoryItem(
+                        selectedItem.getItemName(),
+                        initial,
+                        supply,
+                        finalStock
+                );
+
+                if (db.updateItem(updatedItem)) {
+                    refreshTable();
+                    clearFields();
+                }
+
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Input angka tidak valid.");
+                alert.showAndWait();
+            }
+        }
 
 
     }
@@ -103,6 +143,31 @@ public class UmbrellaController implements Initializable {
         // ==============================================================================
 
         // --- TULIS KODE ANDA DI BAWAH INI ---
+        try {
+            String itemName = txtItem.getText();
+
+            int initial = Integer.parseInt(txtInitial.getText());
+            int supply = Integer.parseInt(txtSupply.getText());
+
+            int finalStock = initial + supply;
+
+            InventoryItem item = new InventoryItem(
+                    itemName,
+                    initial,
+                    supply,
+                    finalStock
+            );
+
+            db.addItem(item);
+
+            refreshTable();
+            clearFields();
+
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Input angka tidak valid.");
+            alert.showAndWait();
+        }
 
 
     }
@@ -123,6 +188,32 @@ public class UmbrellaController implements Initializable {
         // ==============================================================================
 
         // --- TULIS KODE ANDA DI BAWAH INI ---
+        InventoryItem selected = tableInventory.getSelectionModel().getSelectedItem();
+
+        if (selected != null) {
+
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Konfirmasi");
+            confirm.setHeaderText(null);
+            confirm.setContentText("Hapus item ini?");
+
+            if (confirm.showAndWait().get() == ButtonType.OK) {
+
+                if (db.deleteItem(selected.getItemName())) {
+
+                    masterData.remove(selected);
+                    clearFields();
+                }
+            }
+
+        } else {
+
+            Alert warning = new Alert(Alert.AlertType.WARNING);
+            warning.setTitle("Peringatan");
+            warning.setHeaderText(null);
+            warning.setContentText("Pilih item terlebih dahulu.");
+            warning.showAndWait();
+        }
 
 
     }
